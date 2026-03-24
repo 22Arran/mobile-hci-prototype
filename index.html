@@ -38,6 +38,10 @@
       background: orange;
     }
 
+    .selected {
+      background: green !important;
+    }
+
     #cursor {
       position: absolute;
       width: 20px;
@@ -100,7 +104,7 @@ function handleTilt(event) {
   let gamma = event.gamma || 0;
   let beta = event.beta || 0;
 
-  // Reduced sensitivity for better control
+  // Reduced sensitivity (more stable)
   x += gamma * 0.1;
   y += beta * 0.1;
 
@@ -121,7 +125,11 @@ function detectHover() {
   selectedButton = null;
 
   buttons.forEach(btn => {
+    // Remove hover highlight only
     btn.classList.remove("highlight");
+
+    // Skip already selected buttons
+    if (btn.classList.contains("selected")) return;
 
     let rect = btn.getBoundingClientRect();
 
@@ -163,10 +171,10 @@ function confirmSelection() {
   if (selectedButton) {
     isSelecting = true;
 
-    selectedButton.style.background = "green";
+    selectedButton.classList.add("selected");
+    selectedButton.classList.remove("highlight");
 
     setTimeout(() => {
-      selectedButton.style.background = "lightgray";
       isSelecting = false;
     }, 500);
   }
